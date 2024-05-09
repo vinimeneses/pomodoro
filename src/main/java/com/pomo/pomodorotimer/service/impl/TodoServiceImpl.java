@@ -49,4 +49,15 @@ public class TodoServiceImpl implements TodoService {
         List<Todo> todos = todoRepository.getTodosByUserId(userId);
         return todos.stream().map(todo -> modelMapper.map(todo, TodoDto.class)).toList();
     }
+
+    @Override
+    public TodoDto updateTodoById(Long id, TodoDto todoDto) {
+        Todo todo = todoRepository.findById(id).orElseThrow(() -> new RuntimeException("Todo not found"));
+        todo.setInitialQuantity(todo.getInitialQuantity() + 1);
+
+        if (todo.getInitialQuantity() == todo.getQuantity()) {
+            todo.setDone(true);
+        }
+        return modelMapper.map(todoRepository.save(todo), TodoDto.class);
+    }
 }

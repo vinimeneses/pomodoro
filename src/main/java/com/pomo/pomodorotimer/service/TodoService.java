@@ -11,4 +11,6 @@ public interface TodoService {
     TodoDto getTodoById(Long id);
 
     List<TodoDto> getTodosByUserId(Long userId);
+
+    TodoDto updateTodoById(Long id, TodoDto todoDto);
 }
