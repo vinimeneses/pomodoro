@@ -10,6 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TodoServiceImpl implements TodoService {
 
@@ -33,5 +35,18 @@ public class TodoServiceImpl implements TodoService {
         Todo todo = modelMapper.map(todoDto, Todo.class);
         todo.setUser(user);
         return modelMapper.map(todoRepository.save(todo), TodoDto.class);
+    }
+
+    @Override
+    public TodoDto getTodoById(Long id) {
+        Todo todo = todoRepository.findById(id).orElseThrow(() -> new RuntimeException("Todo not found"));
+        return modelMapper.map(todo, TodoDto.class);
+    }
+
+
+    @Override
+    public List<TodoDto> getTodosByUserId(Long userId) {
+        List<Todo> todos = todoRepository.getTodosByUserId(userId);
+        return todos.stream().map(todo -> modelMapper.map(todo, TodoDto.class)).toList();
     }
 }
