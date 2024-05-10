@@ -8,6 +8,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -27,4 +29,25 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.save(modelMapper.map(userDto, User.class));
         return modelMapper.map(user, UserDto.class);
     }
+
+    @Override
+    public UserDto getUserById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return modelMapper.map(user, UserDto.class);
+    }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(user -> modelMapper.map(user, UserDto.class)).toList();
+    }
+
+    @Override
+    public UserDto updatePasswordById(Long id, String password) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setPassword(password);
+        return modelMapper.map(userRepository.save(user), UserDto.class);
+    }
+
+
 }
