@@ -13,4 +13,6 @@ public interface UserService {
     List<UserDto> getAllUsers();
 
     UserDto updatePasswordById(Long id, String password);
+
+
 }
